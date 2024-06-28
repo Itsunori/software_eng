@@ -1,0 +1,47 @@
+@startuml
+object User{
+    id : 1
+    name : "山田太朗"
+}
+
+object Clerk{
+    name: "山田花子"
+}
+
+object Reserve{
+    user : User
+    room : Room
+    clerk : Clerk
+    payment : Card
+    checkInDate : 20240201-1900
+    checkOutDate : 20240202-0900
+    reserveDate : 20240101-0800
+}
+
+object Room{
+    roomNo : 101
+    price : 10000
+    schedule : [20240201]
+}
+
+object Card{
+    type : "VISA"
+    amount : 10000
+    isPaid : true
+}
+
+object Hotel{
+    name : "ホテルxxx"
+    rooms : Room
+    clerks : Clerk
+    reserves : Reserve
+}
+
+Hotel *-- Room
+Hotel *-- Clerk
+Hotel o-- Reserve
+Reserve -- User
+Reserve -- Room
+Reserve -- Card
+Reserve -- Clerk
+@enduml
