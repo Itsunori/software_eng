@@ -24,7 +24,7 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 
 	private static final String DRIVER_NAME = "org.hsqldb.jdbcDriver";
 
-	private static final String URL = "jdbc:hsqldb:hsql://localhost;shutdown=true";
+	private static final String URL = "jdbc:hsqldb:file:../dev_program_DB/mydb/mydb";
 
 	private static final String TABLE_NAME = "AVAILABLEQTY";
 
@@ -57,6 +57,7 @@ public class AvailableQtySqlDao implements AvailableQtyDao {
 			}
 		}
 		catch (SQLException e) {
+			System.out.println(e);
 			RoomException exception = new RoomException(RoomException.CODE_DB_EXEC_QUERY_ERROR, e);
 			exception.getDetailMessages().add("getAvailableQty()");
 			throw exception;
