@@ -31,6 +31,42 @@ public class ReservationManager {
 		return reservationNumber;
 	}
 
+	public Date cacelReservation(String reservationNumber) throws ReservationException,
+			NullPointerException {
+		if (reservationNumber == null) {
+			throw new NullPointerException("reservationNumber");
+		}
+
+		ReservationDao reservationDao = getReservationDao();
+		Reservation reservation = reservationDao.getReservation(reservationNumber);
+		//If corresponding reservation does not exist
+		if (reservation == null) {
+			ReservationException exception = new ReservationException(
+					ReservationException.CODE_RESERVATION_NOT_FOUND);
+			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
+			throw exception;
+		}
+		//If reservation has been consumed already
+		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CONSUME)) {
+			ReservationException exception = new ReservationException(
+					ReservationException.CODE_RESERVATION_ALREADY_CONSUMED);
+			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
+			throw exception;
+		}
+		// If reservation has benn canceled already
+		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CANCEL)) {
+			ReservationException exception = new ReservationException(
+					ReservationException.CODE_RESERVATION_ALREADY_CANCELED);
+			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
+			throw exception;
+		}
+
+		Date stayingDate = reservation.getStayingDate();
+		reservation.setStatus(Reservation.RESERVATION_STATUS_CANCEL);
+		reservationDao.updateReservation(reservation);
+		return stayingDate;
+	}
+
 	private synchronized String generateReservationNumber() {
 		Calendar calendar = Calendar.getInstance();
 		try {
@@ -60,6 +96,13 @@ public class ReservationManager {
 		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CONSUME)) {
 			ReservationException exception = new ReservationException(
 					ReservationException.CODE_RESERVATION_ALREADY_CONSUMED);
+			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
+			throw exception;
+		}
+		// If reservation has benn canceled already
+		if (reservation.getStatus().equals(Reservation.RESERVATION_STATUS_CANCEL)) {
+			ReservationException exception = new ReservationException(
+					ReservationException.CODE_RESERVATION_ALREADY_CANCELED);
 			exception.getDetailMessages().add("reservation_number[" + reservationNumber + "]");
 			throw exception;
 		}

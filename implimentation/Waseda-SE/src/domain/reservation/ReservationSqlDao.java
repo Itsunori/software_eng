@@ -23,7 +23,7 @@ public class ReservationSqlDao implements ReservationDao {
 
 	private static final String DRIVER_NAME = "org.hsqldb.jdbcDriver";
 
-	private static final String URL = "jdbc:hsqldb:hsql://localhost;shutdown=true";
+	private static final String URL = "jdbc:hsqldb:file:../dev_program_DB/mydb/mydb";
 
 	private static final String TABLE_NAME = "RESERVATION";
 
