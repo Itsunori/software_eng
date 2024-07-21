@@ -2,14 +2,9 @@
 class User
 User : Int id
 User : String name
-User : reserve()
-User : checkIn()
-User : checkOut()
 
 class Clerk
 Clerk : String name
-Clerk : checkIn()
-Clerk : checkOut()
 
 class Reserve
 Reserve : User user
@@ -24,24 +19,20 @@ class Room
 Room : Int roomNo
 Room : Int price
 Room : Date[] schedule
-Room : Bool isAvailable()
 
 abstract class Payment
 Payment : String type
 Payment : Int amount
-Payment : pay()
 Payment : Bool isPaid
 
 class Cash
 Cash : String type
 Cash : Int amount
-Cash : pay()
 Cash : Bool isPaid
 
 class Card
 Card : String type
 Card : Int amount
-Card : pay()
 Card : Bool isPaid
 
 class Hotel
@@ -49,16 +40,14 @@ Hotel : String name
 Hotel : Room[] rooms
 Hotel : Clerk[] clerks
 Hotel : Reserves[] reserves
-Hotel : searchReserve()
-Hotel : reserve()
 
 Hotel *-- "1..*" Room
 Hotel *-- "1..*" Clerk
 Hotel o-- "1..*" Reserve
-Reserve -- User
-Reserve -- Room
-Reserve -- Payment
-Reserve -- Clerk
-Payment <|-- Cash
-Payment <|-- Card
+Reserve -- "1..1" User
+Reserve -- "1..1" Room
+Reserve -- "1..1" Payment
+Reserve -- "1..1" Clerk
+Payment <|-- "1..1" Cash
+Payment <|-- "1..1" Card
 @enduml
