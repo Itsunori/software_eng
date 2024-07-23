@@ -19,28 +19,29 @@ import domain.room.RoomException;
 public class CheckOutRoomControl {
 	
 	public void checkOut(String roomNumber) throws AppException {
-		// try {
-		// 	//Clear room
-		// 	/*
-		// 	 * Your code for clearing room by using domain.room.RoomManager
-		// 	 */
-		// 	//Consume payment
-		// 	/*
-		// 	 * Your code for consuming payment by using domain.payment.PaymentManager
-		// 	 */
-		// }
-		// catch (RoomException e) {
-		// 	AppException exception = new AppException("Failed to check-out", e);
-		// 	exception.getDetailMessages().add(e.getMessage());
-		// 	exception.getDetailMessages().addAll(e.getDetailMessages());
-		// 	throw exception;
-		// }
-		// catch (PaymentException e) {
-		// 	AppException exception = new AppException("Failed to check-out", e);
-		// 	exception.getDetailMessages().add(e.getMessage());
-		// 	exception.getDetailMessages().addAll(e.getDetailMessages());
-		// 	throw exception;
-		// }
+		try {
+			//Assign room
+			RoomManager roomManager = getRoomManager();
+			Date stayingDate = roomManager.removeCustomer(roomNumber);
+
+			//Create payment
+			PaymentManager paymentManager = getPaymentManager();
+			paymentManager.consumePayment(stayingDate, roomNumber);
+
+			return;
+		}
+		catch (RoomException e) {
+			AppException exception = new AppException("Failed to check-out", e);
+			exception.getDetailMessages().add(e.getMessage());
+			exception.getDetailMessages().addAll(e.getDetailMessages());
+			throw exception;
+		}
+		catch (PaymentException e) {
+			AppException exception = new AppException("Failed to check-out", e);
+			exception.getDetailMessages().add(e.getMessage());
+			exception.getDetailMessages().addAll(e.getDetailMessages());
+			throw exception;
+		}
 	}
 
 	private RoomManager getRoomManager() {
